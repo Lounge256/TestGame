@@ -17,7 +17,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
  * A Group is an Actor that have children.
  */
 public class GemGrid extends Group {
-	static final float SIZE = 50, PADDING = 5;
+	static final float SIZE = 70, PADDING = 5;
 	Gem [][] grid;
 	Gem lastGem;
 	
