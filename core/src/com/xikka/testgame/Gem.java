@@ -51,7 +51,7 @@ public class Gem extends Actor {
 	}
 	
 	// Draw the gem according to its colour and shape!
-	//The draw method of an actor can be overriden to draw whatever we want!
+	//The draw method of an actor can be overridden to draw whatever we want!
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		// End the sprite batch (used for drawing images)
@@ -74,6 +74,14 @@ public class Gem extends Actor {
 				renderer.circle(getWidth()/2, getHeight()/2, getWidth()/2);
 			} else if (shape == Shape.Triangle) {
 				renderer.triangle(0, 0, getWidth(), 0, getWidth()/2, getHeight());
+			} else if (shape == Shape.Pentagon) {
+				renderer.triangle((float)(getWidth()*0.191), 0, getWidth()/2, getHeight(), (float)(getWidth()*0.809), 0);
+				renderer.triangle((float)(getWidth()*0.191), 0, getWidth()/2, getHeight(), 0, (float)(getHeight()*0.637));
+				renderer.triangle((float)(getWidth()*0.809), 0, getWidth()/2, getHeight(), getWidth(), (float)(getHeight()*0.637));
+			} else if (shape == Shape.Star) {
+				renderer.triangle((float)(getWidth()*0.191), 0, getWidth()/2, getHeight(), (float)(getWidth()*0.724), (float)(getHeight()*0.406));
+				renderer.triangle((float)(getWidth()*0.191), 0, (float)(getWidth()*0.388), (float)(getHeight()*0.637), getWidth(), (float)(getHeight()*0.637));
+				renderer.triangle(0, (float)(getHeight()*0.637), (float)(getWidth()*0.612), (float)(getHeight()*0.637), (float)(getWidth()*0.809), 0);
 			}
 			
 			renderer.end();
@@ -95,6 +103,8 @@ public class Gem extends Actor {
 		Circle,
 		Square,
 		Triangle,
+		Pentagon,
+		Star
 		;
 		static Shape random() {
 			return Shape.values()[(int) (Math.random() * Shape.values().length)];
@@ -104,6 +114,7 @@ public class Gem extends Actor {
 		Red(Color.RED),
 		Green(Color.GREEN),
 		Blue(Color.BLUE),
+		Yellow(Color.YELLOW)
 		;
 		Color glColour;
 		Colour(Color c) {
