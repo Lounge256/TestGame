@@ -15,6 +15,8 @@ public class TestGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		Fonts.init();
+		
 		// Create a shape renderer.
 		// We use this to draw shapes and the like -- it does a lot of mathematics for us!
 		// There is no need to have more than one as we will only have on thread.

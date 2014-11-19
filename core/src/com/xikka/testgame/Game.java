@@ -1,6 +1,7 @@
 package com.xikka.testgame;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -13,6 +14,9 @@ public class Game extends Group {
 		if (self != null) System.exit(1);
 		self = this;
 	}
+	
+	static int score;
+	static int linkLength;
 	
 	Game(float width, float height) {
 		setSize(width, height);
@@ -39,15 +43,25 @@ public class Game extends Group {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				// Delete selected gems!
 				gemGrid.deleteSelectedGems();
-				addLinkScore();
+				if (linkLength == 1) {
+					score -= 10;
+				} else {
+					addLinkScore();
+				}
+				linkLength = 0;
 				return true;
 			}
 		});
 	}
-	static int score;
-	static int linkLength;
 	
 	void addLinkScore(){
 		score += (Math.floor(linkLength/10))*5;
+	}
+	
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		Fonts.smallFont.setColor((score >= 0) ? Color.BLACK : Color.RED);
+		Fonts.smallFont.draw(batch, "Score: "+score, 5, getHeight() - 5);
+		super.draw(batch, parentAlpha);
 	}
 }
