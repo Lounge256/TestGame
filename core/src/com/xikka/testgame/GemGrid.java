@@ -17,7 +17,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
  * A Group is an Actor that have children.
  */
 public class GemGrid extends Group {
-	static float size = 100, PADDING = 5;
+	static final float SIZE = 50, PADDING = 5;
 	Gem [][] grid;
 	Gem lastGem;
 	
@@ -29,11 +29,9 @@ public class GemGrid extends Group {
 		// Create a grid of gems!
 		grid = new Gem[columns][rows];
 		
-		// Set the size of this actor to be large enough to accommodate all gems
-		if (columns * size > Game.self.getWidth()) {
-			size = (Game.self.getWidth() / columns)-10;
-		}
-		setSize(columns * size, rows * size);
+		// Set the size of this actor to be large enough to accomodate all gems
+		setSize(columns * SIZE, rows * SIZE);
+		
 		// Add all gems to the array, and add them as children
 		// See bottom of page
 		replenish();
@@ -83,7 +81,7 @@ public class GemGrid extends Group {
 							// Animation
 							int diff = newRow - j;
 							if (0.2f * diff > maxWait) maxWait = 0.2f * diff;
-							grid[i][j].addAction(Actions.moveBy(0, -diff * size, 0.2f * diff));
+							grid[i][j].addAction(Actions.moveBy(0, -diff * SIZE, 0.2f * diff));
 							grid[i][j].row = newRow;
 							grid[i][newRow] = grid[i][j];
 							grid[i][j] = null;
@@ -111,7 +109,7 @@ public class GemGrid extends Group {
 	void replenish() {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
-				final float x = i * size, y = getHeight() - j * size;
+				final float x = i * SIZE, y = getHeight() - j * SIZE;
 				if (grid[i][j] == null) {
 					final Gem gem = new Gem();
 					
@@ -121,11 +119,11 @@ public class GemGrid extends Group {
 					gem.row = j;
 					
 					gem.setSize(0, 0);
-					gem.setPosition(x + size/2, y + size/2);
+					gem.setPosition(x + SIZE/2, y + SIZE/2);
 					//gem.grow
 					gem.addAction(parallel(
 							moveTo(x + PADDING, y + PADDING, 0.2f),
-							sizeTo(size - 2 * PADDING, size - 2 * PADDING, 0.2f)
+							sizeTo(SIZE - 2 * PADDING, SIZE - 2 * PADDING, 0.2f)
 					));
 					addActor(gem);
 					
@@ -149,8 +147,6 @@ public class GemGrid extends Group {
 									!gem.selected
 								)
 							) {
-								Game.score+=1;
-								Game.linkLength+=1;
 								lastGem = gem;
 								gem.selected = true;
 								selectedGems.add(gem);
