@@ -3,7 +3,12 @@ package com.xikka.testgame;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -194,5 +199,40 @@ public class GemGrid extends Group {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		super.draw(batch, parentAlpha);
+		
+		batch.end();
+		ShapeRenderer renderer = TestGame.renderer;
+		renderer.setProjectionMatrix(batch.getProjectionMatrix());
+		renderer.setTransformMatrix(batch.getTransformMatrix());
+		renderer.translate(getX(), getY(), 0);
+		
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+	    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+	    
+		renderer.begin(ShapeType.Line);
+		renderer.setColor(new Color(.8f,0,0,0.8f));
+		float px = -1, py = -1; 
+		for (Gem g : selectedGems) {
+			if (px > 0) {
+				renderer.line(px, py, g.getX() + g.getWidth()/2, g.getY() + g.getHeight()/2);
+			}
+			px = g.getX() + g.getWidth()/2;
+			py = g.getY() + g.getHeight()/2;
+			
+			// If this is the last gem, draw a border around the shape
+			if (g == lastGem) {
+				Gdx.gl.glLineWidth( 9 );
+				renderer.setColor(Color.ORANGE);
+				renderer.circle(g.getX() + g.getWidth()/2, g.getY() + g.getHeight()/2, g.getWidth()/2);
+			}
+		}
+		renderer.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+		batch.begin();
 	}
 }

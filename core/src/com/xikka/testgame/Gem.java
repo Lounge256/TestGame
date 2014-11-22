@@ -85,15 +85,6 @@ public class Gem extends Actor {
 			}
 			
 			renderer.end();
-			
-			// Draw a border around the shape if it's selected
-			if (selected) {
-				renderer.begin(ShapeType.Line);
-				Gdx.gl.glLineWidth( 9 );
-				renderer.setColor(Color.ORANGE);
-				renderer.circle(getWidth()/2, getHeight()/2, getWidth()/2);
-				renderer.end();
-			}
 		}
 		// Make sure to start drawing the previous batch again
 		batch.begin();

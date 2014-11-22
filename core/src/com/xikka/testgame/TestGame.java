@@ -33,7 +33,7 @@ public class TestGame extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(stage);
 		
 		// Set background to white (r, g, b, a)
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(211f/256f, 169f/256f, 96f/256f, 1);
 		
 		//TODO: Ensure we dispose of all objects at program quit
 	}
