@@ -17,6 +17,11 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
  * A Group is an Actor that have children.
  */
 public class GemGrid extends Group {
+	
+	// Gem grid properties
+		// adding prop_ so we can ctrl-f them easily
+	boolean prop_replenishOnDelete = false;
+	
 	static float size = 100, PADDING = 5;
 	Gem [][] grid;
 	Gem lastGem;
@@ -98,14 +103,31 @@ public class GemGrid extends Group {
 					@Override
 					public void run() {
 						// Grow new crystals!
-						replenish();
-						addAction(sequence(delay(0.2f), Actions.run(new Runnable() {
-							@Override
-							public void run() {
-								lastGem = null;
-								canClick = true;
+						if (prop_replenishOnDelete) { 
+							replenish();
+							addAction(sequence(delay(0.2f), Actions.run(new Runnable() {
+								@Override
+								public void run() {
+									lastGem = null;
+									canClick = true;
+								}
+							})));
+						} else {
+							lastGem = null;
+							canClick = true;
+						}
+						
+						// Is the level complete?
+						gemCheck: {
+							for (int i = 0; i < grid.length; i++) {
+								for (int j = 0; j < grid[i].length; j++) {
+									if (grid[i][j] != null) {
+										break gemCheck;
+									}
+								}
 							}
-						})));
+							game.levelComplete();
+						}
 					}
 				})));
 			}

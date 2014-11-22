@@ -15,14 +15,20 @@ public class Game extends Group {
 		self = this;
 	}
 	
+	int level = 4;
 	int score;
 	int linkLength;
+	GemGrid gemGrid;
 	
 	Game(float width, float height) {
 		setSize(width, height);
 		
-		// Add a GemGrid
-		final GemGrid gemGrid = new GemGrid(this, 4,4);
+		// Add a GemGrid with size equal to the current level
+		gemGrid = new GemGrid(this, level, level++);
+		
+		// Configure the grid
+		gemGrid.prop_replenishOnDelete = false;
+		
 		// Centre the GemGrid on the stage.
 		// Note: (0, 0) is in the bottom-left hand corner when drawing/positioning.
 		//       but (0, 0) is in the top-left hand corner when dealing with Mouse events.
@@ -52,6 +58,16 @@ public class Game extends Group {
 				return true;
 			}
 		});
+	}
+	
+	void levelComplete() {
+		// What to do when the level is over?
+		gemGrid.remove();
+		
+		// For now, delete the last grid and make a new, bigger one!
+		gemGrid = new GemGrid(this, level, level++);
+		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
+		addActor(gemGrid);
 	}
 	
 	void addLinkScore(){
