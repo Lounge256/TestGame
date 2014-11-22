@@ -36,6 +36,7 @@ public class GemGrid extends Group {
 	
 	List<Gem> selectedGems = new LinkedList<Gem>();
 	
+	// Generate a random level
 	GemGrid(Game game, int columns, int rows) {
 		// Maintain reference to the game it controls
 		this.game = game;
@@ -48,9 +49,28 @@ public class GemGrid extends Group {
 			size = (Game.self.getWidth() / columns)-10;
 		}
 		setSize(columns * size, rows * size);
+		
 		// Add all gems to the array, and add them as children
 		// See bottom of page
-		replenish();
+		replenish(null, true);
+	}
+	
+	// Generate a predesigned level
+	GemGrid(Game game, Gem [][] level) {
+		// Maintain reference to the game it controls
+		this.game = game;
+		
+		// Create a grid of gems!
+		int columns = level.length, rows = level[0].length; 
+		grid = new Gem[columns][rows];
+		
+		// Set the size of this actor to be large enough to accommodate all gems
+		if (columns * size > Game.self.getWidth()) {
+			size = (Game.self.getWidth() / columns)-10;
+		}
+		setSize(columns * size, rows * size);
+		
+		replenish(level, true);
 	}
 	
 	void deleteSelectedGems() {
@@ -109,7 +129,7 @@ public class GemGrid extends Group {
 					public void run() {
 						// Grow new crystals!
 						if (prop_replenishOnDelete) { 
-							replenish();
+							replenish(null, true);
 							addAction(sequence(delay(0.2f), Actions.run(new Runnable() {
 								@Override
 								public void run() {
@@ -139,26 +159,34 @@ public class GemGrid extends Group {
 		})));
 	}
 	
-	void replenish() {
+	void replenish(Gem [][] level, boolean animateGrowth) {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				// Should be j+1 otherwise the last row isn't actually at the y-position
 				final float x = i * size, y = getHeight() - (j + 1) * size;
 				if (grid[i][j] == null) {
-					final Gem gem = new Gem();
+					final Gem gem;
+					if (level == null)
+						gem = new Gem();
+					else
+						gem = level[i][j];
 					
 					grid[i][j] = gem;
 					
 					gem.column = i;
 					gem.row = j;
 					
-					gem.setSize(0, 0);
-					gem.setPosition(x + size/2, y + size/2);
-					//gem.grow
-					gem.addAction(parallel(
-							moveTo(x + PADDING, y + PADDING, 0.2f),
-							sizeTo(size - 2 * PADDING, size - 2 * PADDING, 0.2f)
-					));
+					if (animateGrowth) {
+						gem.setSize(0, 0);
+						gem.setPosition(x + size/2, y + size/2);
+						gem.addAction(parallel(
+								moveTo(x + PADDING, y + PADDING, 0.2f),
+								sizeTo(size - 2 * PADDING, size - 2 * PADDING, 0.2f)
+						));
+					} else {
+						gem.setSize(size - 2 * PADDING, size - 2 * PADDING);
+						gem.setPosition(x + PADDING, y + PADDING);
+					}
 					addActor(gem);
 					
 					// Add an "onClick" event to the gem.

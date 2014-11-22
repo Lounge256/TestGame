@@ -20,8 +20,12 @@ public class Gem extends Actor {
 	
 	// Initialise a gem with a random shape and colour.
 	Gem() {
-		shape = Shape.random();
-		colour = Colour.random();
+		this(Shape.random(), Colour.random());
+	}
+	
+	Gem(Shape s, Colour c) {
+		shape = s;
+		colour = c;
 	}
 	
 	boolean isOrthogonallyAdjacent(Gem gem) {

@@ -23,8 +23,27 @@ public class Game extends Group {
 	Game(float width, float height) {
 		setSize(width, height);
 		
-		// Add a GemGrid with size equal to the current level
-		gemGrid = new GemGrid(this, level, level++);
+		// Add a _random_ GemGrid with size equal to the current level
+		//gemGrid = new GemGrid(this, level, level++);
+		
+		// Add a predesigned GemGrid
+		// For now, something we can complete in one chain
+		// The more interesting levels have gravity to take into consideration etc.
+		// That can wait! We should make a level editor if we want to pump out quality levels...
+		gemGrid = new GemGrid(this, new Gem[][] {
+			{
+				// Column 1
+				new Gem(Gem.Shape.Circle, Gem.Colour.Red), new Gem(Gem.Shape.Circle, Gem.Colour.Yellow), new Gem(Gem.Shape.Triangle, Gem.Colour.Green)
+			},
+			{
+				// Column 2
+				new Gem(Gem.Shape.Star, Gem.Colour.Yellow), new Gem(Gem.Shape.Square, Gem.Colour.Yellow), new Gem(Gem.Shape.Star, Gem.Colour.Green)
+			},
+			{
+				// Column 3
+				new Gem(Gem.Shape.Pentagon, Gem.Colour.Yellow), new Gem(Gem.Shape.Pentagon, Gem.Colour.Blue), new Gem(Gem.Shape.Star, Gem.Colour.Blue)
+			}
+		});
 		
 		// Configure the grid
 		gemGrid.prop_replenishOnDelete = false;
