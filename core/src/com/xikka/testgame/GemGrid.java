@@ -115,7 +115,8 @@ public class GemGrid extends Group {
 	void replenish() {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
-				final float x = i * size, y = getHeight() - j * size;
+				// Should be j+1 otherwise the last row isn't actually at the y-position
+				final float x = i * size, y = getHeight() - (j + 1) * size;
 				if (grid[i][j] == null) {
 					final Gem gem = new Gem();
 					

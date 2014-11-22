@@ -28,13 +28,13 @@ public class Game extends Group {
 		//       but (0, 0) is in the top-left hand corner when dealing with Mouse events.
 		//       That's just the way OpenGL does it, and although you can set a y-down camera,
 		//       I would hypothesise it isn't worth it.
-		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight() - gemGrid.getWidth() - 10);
+		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
 		addActor(gemGrid);
 		
-		// Add a "button" below the GemGrid
+		// Add a "button" at the bottom of the screen
 		Button button = new Button();
 		button.setSize(gemGrid.getWidth(), 44);
-		button.setPosition(getWidth()/2 - button.getWidth()/2, gemGrid.getY() - 2 * button.getHeight());
+		button.setPosition(getWidth()/2 - button.getWidth()/2, (getWidth() - gemGrid.getWidth())/2);
 		addActor(button);
 		
 		// Add an "onClick" event to the button.
