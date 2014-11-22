@@ -15,14 +15,14 @@ public class Game extends Group {
 		self = this;
 	}
 	
-	static int score;
-	static int linkLength;
+	int score;
+	int linkLength;
 	
 	Game(float width, float height) {
 		setSize(width, height);
 		
 		// Add a GemGrid
-		final GemGrid gemGrid = new GemGrid(4,4);
+		final GemGrid gemGrid = new GemGrid(this, 4,4);
 		// Centre the GemGrid on the stage.
 		// Note: (0, 0) is in the bottom-left hand corner when drawing/positioning.
 		//       but (0, 0) is in the top-left hand corner when dealing with Mouse events.

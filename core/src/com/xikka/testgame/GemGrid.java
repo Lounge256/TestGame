@@ -20,12 +20,16 @@ public class GemGrid extends Group {
 	static float size = 100, PADDING = 5;
 	Gem [][] grid;
 	Gem lastGem;
+	Game game;
 	
 	boolean canClick = true;
 	
 	List<Gem> selectedGems = new LinkedList<Gem>();
 	
-	GemGrid(int columns, int rows) {
+	GemGrid(Game game, int columns, int rows) {
+		// Maintain reference to the game it controls
+		this.game = game;
+		
 		// Create a grid of gems!
 		grid = new Gem[columns][rows];
 		
@@ -149,8 +153,8 @@ public class GemGrid extends Group {
 									!gem.selected
 								)
 							) {
-								Game.score+=1;
-								Game.linkLength+=1;
+								game.score+=1;
+								game.linkLength+=1;
 								lastGem = gem;
 								gem.selected = true;
 								selectedGems.add(gem);
