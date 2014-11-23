@@ -2,9 +2,12 @@ package com.xikka.testgame;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 public class Game extends Group {
 	// Create a statically available reference to this class.
@@ -20,8 +23,14 @@ public class Game extends Group {
 	int linkLength;
 	GemGrid gemGrid;
 	
+	boolean finished;
+	float totalTime, remainingTime;
+	
 	Game(float width, float height) {
 		setSize(width, height);
+		
+		// Time limit
+		totalTime = remainingTime = 60; // 1 minute
 		
 		// Add a _random_ GemGrid with size equal to the current level
 		//gemGrid = new GemGrid(this, level, level++);
@@ -30,6 +39,7 @@ public class Game extends Group {
 		// For now, something we can complete in one chain
 		// The more interesting levels have gravity to take into consideration etc.
 		// That can wait! We should make a level editor if we want to pump out quality levels...
+		
 		gemGrid = new GemGrid(this, new Gem[][] {
 			{
 				// Column 1
@@ -96,7 +106,39 @@ public class Game extends Group {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		Fonts.smallFont.setColor((score >= 0) ? Color.BLACK : Color.RED);
-		Fonts.smallFont.draw(batch, "Score: "+score, 5, getHeight() - 5);
+		Fonts.smallFont.draw(batch, "Score: "+score, 5, getHeight() - 25);
+		batch.end();
+		{
+			ShapeRenderer renderer = TestGame.renderer;
+			renderer.setProjectionMatrix(batch.getProjectionMatrix());
+			renderer.setTransformMatrix(batch.getTransformMatrix());
+			renderer.translate(getX(), getY(), 0);
+			
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(Color.BLUE);
+			renderer.rect(0, getHeight() - 20, getWidth(), 20);
+			
+			renderer.setColor(Color.RED);
+			renderer.rect(0, getHeight() - 20, getWidth() * (remainingTime/totalTime), 20);
+			
+			renderer.end();
+		}
+		batch.begin();
 		super.draw(batch, parentAlpha);
+	}
+	
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		if (!finished && (remainingTime -= delta) <= 0) {
+			// Level over -- you lose!
+			gemGrid.setTouchable(Touchable.disabled);
+			
+			Flash flash = new Flash(getWidth(), getHeight());
+			flash.flash(Color.RED, null);
+			addActor(flash);
+			
+			finished = true;
+		}
 	}
 }
