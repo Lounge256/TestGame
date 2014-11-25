@@ -113,7 +113,7 @@ public class Game extends Group {
 		// This makes pushing the button feel a bit more exciting
 		score += linkLength * linkLength;
 		// +1/2 second per gem deleted
-		remainingTime += linkLength / 2f;
+		remainingTime += linkLength / 4f;
 	}
 	
 	@Override
