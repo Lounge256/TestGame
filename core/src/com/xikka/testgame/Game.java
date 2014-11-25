@@ -57,6 +57,7 @@ public class Game extends Group {
 		
 		// Configure the grid
 		gemGrid.prop_replenishOnDelete = false;
+		gemGrid.prop_columnSquidge = true;
 		
 		// Centre the GemGrid on the stage.
 		// Note: (0, 0) is in the bottom-left hand corner when drawing/positioning.
@@ -77,12 +78,13 @@ public class Game extends Group {
 			@Override
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				// Delete selected gems!
-				gemGrid.deleteSelectedGems();
 				if (linkLength == 1) {
-					score -= 10;
+					// TODO: Ten points is a bit too drastic. Perhaps lose a life?
+					score -= 1;
 				} else {
 					addLinkScore();
 				}
+				gemGrid.deleteSelectedGems();
 				linkLength = 0;
 				return true;
 			}
@@ -96,11 +98,22 @@ public class Game extends Group {
 		// For now, delete the last grid and make a new, bigger one!
 		gemGrid = new GemGrid(this, level, level++);
 		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
+		gemGrid.prop_columnSquidge = true;
+		if (level >= 7) {
+			// At max level, do an infini-grid
+			level = 7;
+			gemGrid.prop_replenishOnDelete = false;
+		}
 		addActor(gemGrid);
 	}
 	
 	void addLinkScore(){
-		score += (Math.floor(linkLength/10))*5;
+		//score += (Math.floor(linkLength/10))*5;
+		// A more rewarding score -- took out the point-per-click mechanic for now
+		// This makes pushing the button feel a bit more exciting
+		score += linkLength * linkLength;
+		// +1/2 second per gem deleted
+		remainingTime += linkLength / 2f;
 	}
 	
 	@Override

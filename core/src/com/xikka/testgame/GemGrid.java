@@ -26,8 +26,10 @@ public class GemGrid extends Group {
 	// Gem grid properties
 		// adding prop_ so we can ctrl-f them easily
 	boolean prop_replenishOnDelete = false;
+	boolean prop_columnSquidge = false;
 	
 	static float size = 100, PADDING = 5;
+	int initialColumns, filledColumns;
 	Gem [][] grid;
 	Gem lastGem;
 	Game game;
@@ -42,6 +44,7 @@ public class GemGrid extends Group {
 		this.game = game;
 		
 		// Create a grid of gems!
+		initialColumns = filledColumns = columns;
 		grid = new Gem[columns][rows];
 		
 		// Set the size of this actor to be large enough to accommodate all gems
@@ -62,6 +65,7 @@ public class GemGrid extends Group {
 		
 		// Create a grid of gems!
 		int columns = level.length, rows = level[0].length; 
+		initialColumns = filledColumns = columns;
 		grid = new Gem[columns][rows];
 		
 		// Set the size of this actor to be large enough to accommodate all gems
@@ -122,6 +126,77 @@ public class GemGrid extends Group {
 							grid[i][newRow] = grid[i][j];
 							grid[i][j] = null;
 						}
+					}
+				}
+				// Column squidge!
+				// Gotta love a good algorithm
+				// Go through each column and see if there are any empty ones
+				if (prop_columnSquidge) {
+					int currentColumns = initialColumns;
+					column:
+					for (int i = 0; i < grid.length; i++) {
+						for (int j = 0; j < grid[i].length; j++) {
+							if (grid[i][j] != null) {
+								continue column;
+							}
+						}
+						
+						// Column is empty
+						boolean didSwap = false;
+						// Bring every Gem which is further right as far left as possible
+						for (int ii = i + 1; ii < grid.length; ii++) {
+							
+							// Find the furthest left empty column before this one (we might not need it):
+							int empty = ii - 1;
+							findEmpty:
+							for (int emptyCandidate = ii - 2; emptyCandidate >= 0; emptyCandidate--) {
+								// Is this column empty?
+								for (int jj = 0; jj < grid[emptyCandidate].length; jj++)
+									if (grid[emptyCandidate][jj] != null)
+										break findEmpty;
+								empty = emptyCandidate;
+							}
+							
+							for (int j = 0; j < grid[ii].length; j++) {
+								// No Gem, no need to move over
+								if (grid[ii][j] == null)
+									continue;
+								
+								grid[empty][j] = grid[ii][j];
+								grid[ii][j] = null;
+								didSwap = true;
+							}
+						}
+						// This column is definitely empty since we haven't put any gems there.
+						if (!didSwap)
+							currentColumns--;
+					}
+					if (currentColumns != filledColumns) {
+						// There has been a squidge!
+						//int squidgeSize = filledColumns - currentColumns;
+						final float time = (filledColumns - currentColumns) * 0.2f/2;
+						final float offset = (getWidth() - (currentColumns * size))/2;
+						
+						filledColumns = currentColumns;
+						
+						addAction(sequence(delay(maxWait), Actions.run(new Runnable() {
+							@Override
+							public void run() {
+								// Recentre grid (only left-most columns are filled)
+								for (int i = 0; i < grid.length; i++) {
+									for (int j = 0; j < grid[i].length; j++) {
+										if (grid[i][j] != null) {
+											grid[i][j].column = i;
+											//grid[i][j].setX(i * size + offset + PADDING);
+											grid[i][j].addAction(
+													Actions.moveTo(i * size + offset + PADDING, grid[i][j].getY(), time)
+											);
+										}
+									}
+								}
+							}
+						})));
+						maxWait += time;
 					}
 				}
 				addAction(sequence(delay(maxWait), Actions.run(new Runnable() {
@@ -209,7 +284,6 @@ public class GemGrid extends Group {
 									!gem.selected
 								)
 							) {
-								game.score+=1;
 								game.linkLength+=1;
 								lastGem = gem;
 								gem.selected = true;
