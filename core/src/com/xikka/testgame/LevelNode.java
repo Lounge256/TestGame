@@ -44,12 +44,16 @@ public class LevelNode extends Actor{
 			if (shape == Shape.Circle) {
 				renderer.circle(getWidth()/2, getHeight()/2, getWidth()/2);
 			}
-			Fonts.smallFont.setColor(Color.BLACK);
-			Fonts.smallFont.draw(batch, levelname, getHeight()/2, getWidth()/2);
 			renderer.end();
 		}
 		// Make sure to start drawing the previous batch again
 		batch.begin();
+		// Fonts must be drawn to a batch
+		// 		Reasoning:
+		// 		You can see "batch" in the parameter list below.
+		// 		Anything taking a batch will just assume it has already been begun to avoid calling begin()/end() unnecessarily.
+		Fonts.smallFont.setColor(Color.BLACK);
+		Fonts.smallFont.draw(batch, levelname, getHeight()/2, getWidth()/2);
 	}
 	
 	
