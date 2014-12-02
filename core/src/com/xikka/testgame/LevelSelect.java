@@ -23,7 +23,7 @@ public class LevelSelect extends Group{
 		setSize(width,height);
 		
 		//load file containing level button positions
-		FileHandle file = Gdx.files.local("levelmap.txt");
+		FileHandle file = Gdx.files.internal("levelmap.txt");
 		String levelmap = file.readString();
 		
 		for (String nodedata:levelmap.split(";")){

@@ -103,7 +103,7 @@ public class Game extends Group {
 	
 	void loadLevel(String level){
 		//read level file
-		FileHandle file = Gdx.files.local(level+".txt");
+		FileHandle file = Gdx.files.internal(level+".txt");
 		String levelData = file.readString();
 		int gs = 5;
 		boolean replen = false;
