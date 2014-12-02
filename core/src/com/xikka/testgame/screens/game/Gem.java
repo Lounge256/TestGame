@@ -1,4 +1,4 @@
-package com.xikka.testgame;
+package com.xikka.testgame.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.xikka.testgame.TestGame;
 
 public class Gem extends Actor {
 	// Store a shape and colour for each gem

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.xikka.testgame.screens.game.Game;
+import com.xikka.ui.Fonts;
 
 public class TestGame extends ApplicationAdapter {
 	

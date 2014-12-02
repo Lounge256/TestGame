@@ -1,4 +1,4 @@
-package com.xikka.testgame;
+package com.xikka.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.xikka.testgame.TestGame;
 
 public class Flash extends Actor {
 	public Flash(float width, float height) {

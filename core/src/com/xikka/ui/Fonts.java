@@ -1,4 +1,4 @@
-package com.xikka.testgame;
+package com.xikka.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

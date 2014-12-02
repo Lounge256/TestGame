@@ -1,4 +1,4 @@
-package com.xikka.testgame;
+package com.xikka.testgame.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -10,6 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.xikka.testgame.TestGame;
+import com.xikka.testgame.screens.levelselect.LevelSelect;
+import com.xikka.ui.Button;
+import com.xikka.ui.Flash;
+import com.xikka.ui.Fonts;
 
 public class Game extends Group {
 	// Create a statically available reference to this class.
@@ -31,7 +36,7 @@ public class Game extends Group {
 	boolean finished;
 	float totalTime, remainingTime;
 	
-	Game(float width, float height) {
+	public Game(float width, float height) {
 		setSize(width, height);
 		
 		// Time limit
@@ -100,7 +105,7 @@ public class Game extends Group {
 		});*/
 	}
 	
-	void loadLevel(String level){
+	public void loadLevel(String level){
 		//read level file
 		FileHandle file = Gdx.files.internal(level+".txt");
 		String levelData = file.readString();

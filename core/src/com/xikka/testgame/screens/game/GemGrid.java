@@ -1,4 +1,4 @@
-package com.xikka.testgame;
+package com.xikka.testgame.screens.game;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.xikka.testgame.TestGame;
+import com.xikka.ui.Flash;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 

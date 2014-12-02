@@ -1,4 +1,4 @@
-package com.xikka.testgame;
+package com.xikka.testgame.screens.levelselect;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.xikka.testgame.screens.game.Game;
 
 public class LevelSelect extends Group{
 
@@ -19,7 +20,7 @@ public class LevelSelect extends Group{
 	String nodename;
 	
 
-	LevelSelect(float width, float height){
+	public LevelSelect(float width, float height){
 		setSize(width,height);
 		
 		//load file containing level button positions
