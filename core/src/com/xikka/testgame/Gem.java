@@ -13,6 +13,7 @@ public class Gem extends Actor {
 	// The definitions are at the bottom of the page (I like to keep inner classes at the bottom)
 	Shape shape;
 	Colour colour;
+	Type type;
 	
 	boolean selected;
 	
@@ -26,6 +27,7 @@ public class Gem extends Actor {
 	Gem(Shape s, Colour c) {
 		shape = s;
 		colour = c;
+		type = Type.Normal;
 	}
 	
 	boolean isOrthogonallyAdjacent(Gem gem) {
@@ -34,8 +36,14 @@ public class Gem extends Actor {
 	}
 	
 	// Do these gems share an attribute?
+	//Only if regular gems
 	boolean matches(Gem gem) {
-		return colour == gem.colour || shape == gem.shape;
+		if(gem.type==Type.Normal){
+			return colour == gem.colour || shape == gem.shape;
+		} else {
+			//TODO: Test for interesting gem stuff
+			return false;
+		}
 	}
 	
 	// Add a little animation to show "explosion"
@@ -92,6 +100,10 @@ public class Gem extends Actor {
 		}
 		// Make sure to start drawing the previous batch again
 		batch.begin();
+	}
+	
+	enum Type {
+		Normal
 	}
 	
 	enum Shape {

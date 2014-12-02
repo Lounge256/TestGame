@@ -15,6 +15,8 @@ public class LevelSelect extends Group{
 		self = this;
 	}
 	
+	String level;
+	String nodename;
 	
 
 	LevelSelect(float width, float height){
@@ -28,12 +30,24 @@ public class LevelSelect extends Group{
 			String[] nodevalues = nodedata.split("/");
 			//  [0]xpos/[1]ypos/[2]symbol/[3]size/[4]name;
 			final LevelNode node;
+			nodename=nodevalues[4];
 			node = new LevelNode(Integer.parseInt(nodevalues[2]), Integer.parseInt(nodevalues[3]), nodevalues[4]);
 			node.setPosition(Float.parseFloat(nodevalues[0])-(Float.parseFloat(nodevalues[3])/2), Float.parseFloat(nodevalues[1])-(Float.parseFloat(nodevalues[3])/2));
 			addActor(node);
+			node.addListener(new InputListener(){
+				@Override
+				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					if (level!=null){
+						Game.loadLevel(level);
+					} else {
+						level = nodename;
+					}
+					return true;
+				}
+			});
 		}
 		
-		//read level properties and populate
+		
 		
 	}
 }

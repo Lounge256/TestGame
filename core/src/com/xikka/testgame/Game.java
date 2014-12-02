@@ -1,5 +1,7 @@
 package com.xikka.testgame;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -21,7 +23,10 @@ public class Game extends Group {
 	int level = 4;
 	int score;
 	int linkLength;
+	boolean playing = false;
+	LevelSelect LevelSelect;
 	GemGrid gemGrid;
+	Button button;
 	
 	boolean finished;
 	float totalTime, remainingTime;
@@ -40,6 +45,7 @@ public class Game extends Group {
 		// The more interesting levels have gravity to take into consideration etc.
 		// That can wait! We should make a level editor if we want to pump out quality levels...
 		
+		/*
 		gemGrid = new GemGrid(this, new Gem[][] {
 			{
 				// Column 1
@@ -54,17 +60,20 @@ public class Game extends Group {
 				new Gem(Gem.Shape.Pentagon, Gem.Colour.Yellow), new Gem(Gem.Shape.Pentagon, Gem.Colour.Blue), new Gem(Gem.Shape.Star, Gem.Colour.Blue)
 			}
 		});
-		
+		*/
+		LevelSelect = new LevelSelect(width,height);
+		addActor(LevelSelect);
 		// Configure the grid
-		gemGrid.prop_replenishOnDelete = false;
-		gemGrid.prop_columnSquidge = true;
+		
+		//gemGrid.prop_replenishOnDelete = false;
+		//gemGrid.prop_columnSquidge = true;
 		
 		// Centre the GemGrid on the stage.
 		// Note: (0, 0) is in the bottom-left hand corner when drawing/positioning.
 		//       but (0, 0) is in the top-left hand corner when dealing with Mouse events.
 		//       That's just the way OpenGL does it, and although you can set a y-down camera,
 		//       I would hypothesise it isn't worth it.
-		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
+		/*gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
 		addActor(gemGrid);
 		
 		// Add a "button" at the bottom of the screen
@@ -72,6 +81,70 @@ public class Game extends Group {
 		button.setSize(gemGrid.getWidth(), 44);
 		button.setPosition(getWidth()/2 - button.getWidth()/2, (getWidth() - gemGrid.getWidth())/2);
 		addActor(button);
+		button.setTouchable(Touchable.disabled);
+		
+		// Add an "onClick" event to the button.
+		button.addListener(new InputListener() {
+			@Override
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				// Delete selected gems!
+				if (linkLength == 1) {
+					// TODO: Ten points is a bit too drastic. Perhaps lose a life?
+					score -= 1;
+				} else {
+					addLinkScore();
+				}
+				gemGrid.deleteSelectedGems();
+				linkLength = 0;
+				return true;
+			}
+		});*/
+	}
+	
+	void loadLevel(String level){
+		//read level file
+		FileHandle file = Gdx.files.local(level+".txt");
+		String levelData = file.readString();
+		int gs = 5;
+		boolean replen = false;
+		boolean squidge = true;
+		boolean rand = true;
+		//parse key pairs
+		String[] values=levelData.split(";");
+		for(String str : values){
+			String[] keypair=str.split("=");
+			vars key = vars.valueOf(keypair[0]);
+			switch (key){
+			case gridSize:
+				gs=Integer.parseInt(keypair[1]);
+				break;
+			case replenish:
+				replen=Boolean.parseBoolean(keypair[1]);
+				break;
+			case squidge:
+				squidge=Boolean.parseBoolean(keypair[1]);
+				break;
+			case random:
+				rand=Boolean.parseBoolean(keypair[1]);
+				break;
+			}
+		}
+		//create gem grid based on key pairs loaded, with defaults above
+		gemGrid=new GemGrid(Game.self, gs, gs, replen, squidge);
+		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
+		addActor(gemGrid);
+		
+		//start the timer
+		playing=true;
+		
+		//Sunil's button code
+		
+		// Add a "button" at the bottom of the screen
+		button = new Button();
+		button.setSize(gemGrid.getWidth(), 44);
+		button.setPosition(getWidth()/2 - button.getWidth()/2, (getWidth() - gemGrid.getWidth())/2);
+		addActor(button);
+		button.setTouchable(Touchable.disabled);
 		
 		// Add an "onClick" event to the button.
 		button.addListener(new InputListener() {
@@ -94,9 +167,11 @@ public class Game extends Group {
 	void levelComplete() {
 		// What to do when the level is over?
 		gemGrid.remove();
-		
+		button.remove();
+		playing=false;
+		/*
 		// For now, delete the last grid and make a new, bigger one!
-		gemGrid = new GemGrid(this, level, level++);
+		gemGrid = new GemGrid(this, level, level++, false, true);
 		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
 		gemGrid.prop_columnSquidge = true;
 		if (level >= 7) {
@@ -105,6 +180,7 @@ public class Game extends Group {
 			gemGrid.prop_replenishOnDelete = false;
 		}
 		addActor(gemGrid);
+		*/
 	}
 	
 	void addLinkScore(){
@@ -142,16 +218,26 @@ public class Game extends Group {
 	
 	@Override
 	public void act(float delta) {
-		super.act(delta);
-		if (!finished && (remainingTime -= delta) <= 0) {
-			// Level over -- you lose!
-			gemGrid.setTouchable(Touchable.disabled);
-			
-			Flash flash = new Flash(getWidth(), getHeight());
-			flash.flash(Color.RED, null);
-			addActor(flash);
-			
-			finished = true;
+		if (playing){
+			super.act(delta);
+			if (!finished && (remainingTime -= delta) <= 0) {
+				// Level over -- you lose!
+				gemGrid.setTouchable(Touchable.disabled);
+				
+				Flash flash = new Flash(getWidth(), getHeight());
+				flash.flash(Color.RED, null);
+				addActor(flash);
+				
+				finished = true;
+				playing=false;
+			}
 		}
+	}
+	
+	public enum vars {
+		gridSize,
+		replenish,
+		squidge,
+		random;
 	}
 }
