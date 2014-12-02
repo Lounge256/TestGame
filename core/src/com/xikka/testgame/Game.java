@@ -105,28 +105,28 @@ public class Game extends Group {
 		//read level file
 		FileHandle file = Gdx.files.internal(level+".txt");
 		String levelData = file.readString();
+		
+		// Default values
 		int gs = 5;
 		boolean replen = false;
 		boolean squidge = true;
 		boolean rand = true;
+		
 		//parse key pairs
 		String[] values=levelData.split(";");
 		for(String str : values){
 			String[] keypair=str.split("=");
-			vars key = vars.valueOf(keypair[0]);
-			switch (key){
-			case gridSize:
+			// Swap this for simple String comparisons
+			if ("gridSize".equals(keypair[0])) {
 				gs=Integer.parseInt(keypair[1]);
-				break;
-			case replenish:
+			} else if ("replenish".equals(keypair[0])) {
 				replen=Boolean.parseBoolean(keypair[1]);
-				break;
-			case squidge:
+			} else if ("squidge".equals(keypair[0])) {
 				squidge=Boolean.parseBoolean(keypair[1]);
-				break;
-			case random:
+			} else if ("random".equals(keypair[0])) {
 				rand=Boolean.parseBoolean(keypair[1]);
-				break;
+			} else {
+				// Unknown property encountered
 			}
 		}
 		//create gem grid based on key pairs loaded, with defaults above
@@ -236,12 +236,5 @@ public class Game extends Group {
 				playing=false;
 			}
 		}
-	}
-	
-	public enum vars {
-		gridSize,
-		replenish,
-		squidge,
-		random;
 	}
 }
