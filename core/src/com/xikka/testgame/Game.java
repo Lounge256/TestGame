@@ -81,7 +81,6 @@ public class Game extends Group {
 		button.setSize(gemGrid.getWidth(), 44);
 		button.setPosition(getWidth()/2 - button.getWidth()/2, (getWidth() - gemGrid.getWidth())/2);
 		addActor(button);
-		button.setTouchable(Touchable.disabled);
 		
 		// Add an "onClick" event to the button.
 		button.addListener(new InputListener() {
@@ -129,12 +128,18 @@ public class Game extends Group {
 				// Unknown property encountered
 			}
 		}
+		
+		// TODO : We should refactor to move LevelSelect to it's own class, and have TestGame.java manage all screen transitions
+		// This is hacky and gross, but it removes the LevelSelect from the screen.
+		clearChildren();
+		
 		//create gem grid based on key pairs loaded, with defaults above
 		gemGrid=new GemGrid(Game.self, gs, gs);
 		
 		// Assign properties (this avoids a constructor which would probably get too huge)
 		gemGrid.prop_replenishOnDelete = replen;
 		gemGrid.prop_columnSquidge = squidge;
+		
 		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
 		addActor(gemGrid);
 		
@@ -148,7 +153,6 @@ public class Game extends Group {
 		button.setSize(gemGrid.getWidth(), 44);
 		button.setPosition(getWidth()/2 - button.getWidth()/2, (getWidth() - gemGrid.getWidth())/2);
 		addActor(button);
-		button.setTouchable(Touchable.disabled);
 		
 		// Add an "onClick" event to the button.
 		button.addListener(new InputListener() {
@@ -169,11 +173,16 @@ public class Game extends Group {
 	}
 	
 	void levelComplete() {
+		// TODO : Display a "congratulations" modal dialog?
+		//        Which in turn takes you back to the level select screen?
+		//        For now I'm reinstating the infini-level because it's fun on the train
+		
 		// What to do when the level is over?
 		gemGrid.remove();
 		button.remove();
 		playing=false;
-		/*
+		
+		// TO BE REMOVED:
 		// For now, delete the last grid and make a new, bigger one!
 		gemGrid = new GemGrid(this, level, level++);
 		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
@@ -184,7 +193,7 @@ public class Game extends Group {
 			gemGrid.prop_replenishOnDelete = false;
 		}
 		addActor(gemGrid);
-		*/
+		
 	}
 	
 	void addLinkScore(){
