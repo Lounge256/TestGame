@@ -130,7 +130,11 @@ public class Game extends Group {
 			}
 		}
 		//create gem grid based on key pairs loaded, with defaults above
-		gemGrid=new GemGrid(Game.self, gs, gs, replen, squidge);
+		gemGrid=new GemGrid(Game.self, gs, gs);
+		
+		// Assign properties (this avoids a constructor which would probably get too huge)
+		gemGrid.prop_replenishOnDelete = replen;
+		gemGrid.prop_columnSquidge = squidge;
 		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
 		addActor(gemGrid);
 		
@@ -171,7 +175,7 @@ public class Game extends Group {
 		playing=false;
 		/*
 		// For now, delete the last grid and make a new, bigger one!
-		gemGrid = new GemGrid(this, level, level++, false, true);
+		gemGrid = new GemGrid(this, level, level++);
 		gemGrid.setPosition(getWidth()/2 - gemGrid.getWidth()/2, getHeight()/2 - gemGrid.getHeight()/2);
 		gemGrid.prop_columnSquidge = true;
 		if (level >= 7) {

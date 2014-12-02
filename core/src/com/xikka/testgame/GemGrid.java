@@ -39,10 +39,7 @@ public class GemGrid extends Group {
 	List<Gem> selectedGems = new LinkedList<Gem>();
 	
 	// Generate a random level
-	GemGrid(Game game, int columns, int rows, boolean replen, boolean squidge) {
-		
-		prop_replenishOnDelete=replen;
-		prop_columnSquidge=squidge;
+	GemGrid(Game game, int columns, int rows) {
 		
 		// Maintain reference to the game it controls
 		this.game = game;
