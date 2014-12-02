@@ -38,7 +38,7 @@ public class LevelSelect extends Group{
 				@Override
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 					if (level!=null){
-						Game.loadLevel(level);
+						Game.self.loadLevel(level);
 					} else {
 						level = nodename;
 					}
